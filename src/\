@@ -1,0 +1,25 @@
+import { useState,useEffect } from 'react';
+
+const useFetcher = () => {
+  const [movies, setMovies] = useState([]);//when you don't know the data type, set null
+  const [loading, setLoading] = useState(true);//loading status
+  const [error, setError] = useState(null);//error at search
+
+  //methods
+  const getMovies = async ( query="batman" ) => {
+    return await axios.get(`http://www.omdbapi.com/?apikey=${apikey}&s=${query}`);
+  }
+
+  const getData = async () => {
+    const { data: { Search }, status } = await getMovies();
+    setMovies(Search);
+    setLoading(false);
+  }
+
+  //useEffect
+  useEffect(() => {
+    getData();
+  }, []);
+}
+
+export default useFetcher;

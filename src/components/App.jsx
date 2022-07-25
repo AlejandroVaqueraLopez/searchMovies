@@ -1,32 +1,47 @@
-import { useState } from 'react'
-import reactLogo from '../assets/react.svg'
+// npm 
+
+// hooks
+import { useRef } from 'react';
+import useFetcher from "../components/useFetcher";
+// assets
+
+// components
+import Movies from '../components/Movies';
+import Loading from '../components/Loading';
+ 
 
 function App () {
-  const [count, setCount] = useState(0)
+  const searchRef = useRef(null);
+
+  const { data: movies, loading, error } = useFetcher();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    //const text = searchRef.current.value;
+    //const { data } = await getMovies(text);
+  }
+
+
 
   return (
-    <div className='App'>
-      <div>
-        <a href='https://vitejs.dev' target='_blank' rel='noreferrer'>
-          <img src='/vite.svg' className='logo' alt='Vite logo' />
-        </a>
-        <a href='https://reactjs.org' target='_blank' rel='noreferrer'>
-          <img src={reactLogo} className='logo react' alt='React logo' />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className='card'>
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className='read-the-docs'>
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
+    <section className='container border border-white my-5'>
+      <h4 className="text-center fw-bold">Movie searcher</h4>
+
+      <form className="form d-flex" action="" onSubmit={ handleSubmit }>
+        <div className="input-group">
+          <input ref={ searchRef } className="form-control" type="search" placeholder="search by ..." />
+        </div>
+        <button className="btn btn-primary br-none" type="submit">Search</button>
+      </form> 
+
+      {
+        loading ? <Loading /> : (
+        <section className="py-4">
+          <Movies data={ movies }/>
+        </section>)
+      }
+
+    </section>
   )
 }
 
