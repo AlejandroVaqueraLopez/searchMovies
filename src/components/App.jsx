@@ -1,27 +1,29 @@
-// npm 
-
 // hooks
-import { useRef } from 'react';
-import useFetcher from "../components/useFetcher";
-// assets
+import { useRef, useState } from 'react';
+import useFetcher from "../components/useFetcher";//custom hook
 
 // components
 import Movies from '../components/Movies';
 import Loading from '../components/Loading';
- 
 
+//native functions
+import { getMovies } from '../utils/getMovies';
+ 
 function App () {
   const searchRef = useRef(null);
+  const [query, setQuery] = useState('avengers');
 
-  const { data: movies, loading, error } = useFetcher();
+  const { response, loading } = useFetcher(query, getMovies);
 
+  //when search input is submited
   const handleSubmit = async (e) => {
     e.preventDefault();
-    //const text = searchRef.current.value;
-    //const { data } = await getMovies(text);
+
+    const searchInput = searchRef.current.value;
+    setQuery(searchInput);
+
+    e.target.reset();
   }
-
-
 
   return (
     <section className='container border border-white my-5'>
@@ -35,14 +37,17 @@ function App () {
       </form> 
 
       {
-        loading ? <Loading /> : (
-        <section className="py-4">
-          <Movies data={ movies }/>
-        </section>)
+        loading 
+          ? <Loading /> 
+          : (
+            <section className="py-4">
+              <Movies data={ response }/>
+            </section>
+          )
       }
 
     </section>
   )
 }
 
-export default App
+export default App;

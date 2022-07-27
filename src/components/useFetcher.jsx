@@ -1,37 +1,27 @@
-import { useState,useEffect } from 'react';
-import axios from "axios";
+//hooks
+import { useState, useEffect } from 'react';
+//native functions
+import { getMovies, getMovie  } from "../utils/getMovies";
 
-const apikey = "bf7d0c70";
-
-const useFetcher = () => {
-  const [data, setData] = useState([]);//this will save the movie array
+const useFetcher = (query, callback) => {
+  const [response, setResponse] = useState([]);//this will save the movie array
   const [loading, setLoading] = useState(true);//loading status
-  const [error, setError] = useState(null);//error at search
-
-
-  //methods
-  const getMovies = async ( query="batman" ) => {
-    return await axios.get(`http://www.omdbapi.com/?apikey=${apikey}&s=${query}`);
-  }
 
   const getData = async () => {
-    const { data } = await getMovies();
-    if(data.Response === 'False')//when you make a bad search request, this handle the error
-    {
-      setError(data.Error);
-      setData([]);
-    }else{
-      setData(data.Search);
-      setLoading(false);
-    }
+    const search = await callback(query);
+    console.log(search);
+
+    setResponse(search);
+
+    setLoading(false);//true or false, the spiner must stop
   }
 
   //useEffect
   useEffect(() => {
     getData();
-  }, []);
+  }, [query]);
 
-  return {data, loading, error};
+  return {response, loading};
 }
 
 export default useFetcher;

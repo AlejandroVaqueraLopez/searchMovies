@@ -3,7 +3,6 @@ import CardMovie from "./CardMovie";
 import { FaBeer } from "react-icons/fa"
 
 const Movies = ({data}) => {
-  console.log(data)
   return (
         (data.length != 0)
           ?(
@@ -15,7 +14,7 @@ const Movies = ({data}) => {
               ))}
             </ul>
           ): (
-            ("no results")
+            <p className="text-center">No results</p>
           )
   );
 }
